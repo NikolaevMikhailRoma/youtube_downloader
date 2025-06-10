@@ -6,15 +6,39 @@
 5. write
 '''python youtube_downloader.py'''
 
-IF DONT WORK:
-# Install Homebrew if not installed
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# Install Python, FFmpeg and Git
+# Instalation
+
+First launch
+```bash
+git clone https://github.com/NikolaevMikhailRoma/youtube_downloader.git 
+cd youtube_downloader
 brew install python@3.12 ffmpeg git
-# Create and activate virtual environment
 python3 -m venv youtube_env
 source youtube_env/bin/activate
-# Install required packages
 pip install yt-dlp
-# Run the script
 python youtube_downloader.py
+```
+
+Not first launch:
+Add urls in youtube_urls.txt
+```bash
+source youtube_env/bin/activate
+python youtube_downloader.py
+```
+
+
+
+
+# IF PROBLEB:
+## Install Homebrew if not installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+## Install Python, FFmpeg and Git
+brew install python@3.12 ffmpeg git
+## Create and activate virtual environment
+python3 -m venv youtube_env
+source youtube_env/bin/activate
+## Install required packages
+pip install yt-dlp
+## Run the script
+python youtube_downloader.py
+
