@@ -54,9 +54,15 @@ def download_video(url, output_folder):
     else:
         noplaylist = True
     
+    # Настройка шаблона имени файла для плейлистов
+    if 'playlist' in url:
+        outtmpl = os.path.join(output_folder, '%(playlist_index)s_%(title)s.%(ext)s')
+    else:
+        outtmpl = os.path.join(output_folder, '%(title)s.%(ext)s')
+    
     ydl_opts = {
         'format': format_option,
-        'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),  # Используем название видео
+        'outtmpl': outtmpl,
         'merge_output_format': 'mp4',
         'postprocessors': [{
             'key': 'FFmpegVideoConvertor',
