@@ -19,6 +19,21 @@ download_dir = "downloads"
 with open(file_path, "r") as file:
     urls = [line.strip() for line in file if line.strip()]
 
+# Функция для получения названия плейлиста
+def get_playlist_title(url):
+    ydl_opts = {
+        'quiet': True,
+        'no_warnings': True,
+        'extract_flat': True,
+    }
+    
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        try:
+            info = ydl.extract_info(url, download=False)
+            return info.get('title', 'Unknown_Playlist').replace('/', '_').replace('\\', '_')
+        except:
+            return 'Unknown_Playlist'
+
 # Функция для скачивания видео и аудио
 def download_video(url, output_folder):
     if LOW_QUALITY:
@@ -30,6 +45,15 @@ def download_video(url, output_folder):
         # Лучшее качество
         format_option = 'bestvideo+bestaudio/best'
     
+    # Проверяем, если это плейлист
+    if 'playlist' in url:
+        playlist_title = get_playlist_title(url)
+        output_folder = os.path.join(output_folder, playlist_title)
+        os.makedirs(output_folder, exist_ok=True)
+        noplaylist = False
+    else:
+        noplaylist = True
+    
     ydl_opts = {
         'format': format_option,
         'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),  # Используем название видео
@@ -39,7 +63,7 @@ def download_video(url, output_folder):
             'preferedformat': 'mp4',
         }],
         # Дополнительные параметры для оптимизации загрузки
-        'noplaylist': True,  # Только одно видео, не плейлист
+        'noplaylist': noplaylist,  # Для плейлистов разрешаем скачивание всех видео
         'restrictfilenames': False,  # Разрешаем специальные символы в именах
         'throttled-rate': '1M',  # Ограничение скорости загрузки для стабильности
     }
