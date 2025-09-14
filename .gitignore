@@ -1,0 +1,18 @@
+# Python virtual environment
+.venv/
+
+# IDE configuration
+.idea/
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Downloaded videos directory
+# Ignore all content inside 'vidoses', but track the directory itself.
+vidoses/*
+!vidoses/.gitkeep

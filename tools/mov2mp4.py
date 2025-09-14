@@ -2,25 +2,23 @@ import subprocess
 import argparse
 
 
-def convert_mov_to_mp4(input_file, output_file):
-    """
-    Конвертирует MOV файл в MP4 файл, используя ffmpeg.
-    """
-    # Формируем команду для конвертации
+def def convert_mov_to_mp4(input_file, output_file):
+    """Converts a MOV file to MP4 using ffmpeg."""
+    # Build the conversion command
     command = ["ffmpeg", "-i", input_file, output_file]
 
     try:
         subprocess.run(command, check=True)
-        print("Конвертация успешно завершена.")
+        print("Conversion finished successfully.")
     except subprocess.CalledProcessError as e:
-        print("Произошла ошибка во время конвертации:")
+        print("An error occurred during conversion:")
         print(e)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Конвертер MOV в MP4")
-    parser.add_argument("input", help="Путь к входному MOV файлу")
-    parser.add_argument("output", help="Путь к выходному MP4 файлу")
+    parser = argparse.ArgumentParser(description="MOV to MP4 converter")
+    parser.add_argument("input", help="Input MOV file path")
+    parser.add_argument("output", help="Output MP4 file path")
     args = parser.parse_args()
 
     convert_mov_to_mp4(args.input, args.output)
