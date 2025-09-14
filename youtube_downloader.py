@@ -7,7 +7,7 @@ LOW_QUALITY = False  # Переключи на True для низкого кач
 
 # Путь к файлу со ссылками
 file_path = "youtube_urls.txt"
-download_dir = "downloads"
+download_dir = "vidoses"
 
 # Очищаем
 # if os.path.exists(download_dir):
