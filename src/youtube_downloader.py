@@ -7,11 +7,11 @@ class MyLogger:
         if "has already been downloaded" in msg:
             print("  File already downloaded.")
         elif msg.startswith('[Merger]'):
-            print('\n  Converting to mp4...')
+            print('  Converting to mp4...')
 
     def info(self, msg):
         if msg.startswith('[Merger]'):
-            print('\n  Converting to mp4...')
+            print('  Converting to mp4...')
 
     def warning(self, msg):
         pass
@@ -63,9 +63,13 @@ def _download_video(url, output_folder, low_quality, file_num, total_files):
             
             percent_str = d.get('_percent_str', '---.-%').strip()
             speed_str = d.get('_speed_str', '----.-B/s').strip()
-            print(f'  Downloading: {percent_str} at {speed_str}   ', end='\r')
+            eta_str = d.get('_eta_str', 'N/A').strip()
+            print(f'  Downloading: {percent_str} at {speed_str} ETA: {eta_str}   ', end='\r')
         elif d['status'] == 'finished':
-            pass
+            elapsed_time = d.get('elapsed')
+            if elapsed_time:
+                minutes, seconds = divmod(int(elapsed_time), 60)
+                print(f'Download finished in {minutes}m {seconds}s.')
     
     ydl_opts = {
         'format': format_option,

@@ -13,17 +13,17 @@ First launch
 git clone https://github.com/NikolaevMikhailRoma/youtube_downloader.git 
 cd youtube_downloader
 brew install python@3.12 ffmpeg git
-python3 -m venv youtube_env
-source youtube_env/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install yt-dlp
-python youtube_downloader.py
+python main.py
 ```
 
 Not first launch:
 Add urls in youtube_urls.txt
 ```bash
-source youtube_env/bin/activate
-python youtube_downloader.py
+source .venv/bin/activate
+python main.py
 ```
 
 
