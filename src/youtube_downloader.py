@@ -3,15 +3,20 @@ import os
 import yt_dlp
 
 class MyLogger:
+    def __init__(self):
+        self.converting_shown = False
+    
     def debug(self, msg):
         if "has already been downloaded" in msg:
             print("  File already downloaded.")
-        elif msg.startswith('[Merger]'):
+        elif msg.startswith('[Merger]') and not self.converting_shown:
             print('  Converting to mp4...')
+            self.converting_shown = True
 
     def info(self, msg):
-        if msg.startswith('[Merger]'):
+        if msg.startswith('[Merger]') and not self.converting_shown:
             print('  Converting to mp4...')
+            self.converting_shown = True
 
     def warning(self, msg):
         pass
@@ -39,26 +44,41 @@ def _download_video(url, output_folder, low_quality, file_num, total_files):
     else:
         format_option = 'bestvideo+bestaudio/best'
     
-    if 'playlist' in url:
+    is_playlist = 'playlist' in url or 'list=' in url
+    
+    if is_playlist:
         playlist_title = _get_playlist_title(url)
         output_folder = os.path.join(output_folder, playlist_title)
         os.makedirs(output_folder, exist_ok=True)
         noplaylist = False
+        print(f"📁 Working with playlist: {playlist_title}")
     else:
         noplaylist = True
     
-    if 'playlist' in url:
+    if is_playlist:
         outtmpl = os.path.join(output_folder, '%(playlist_index)s_%(title)s.%(ext)s')
     else:
         outtmpl = os.path.join(output_folder, '%(title)s.%(ext)s')
 
     printed_filename = False
+    current_file_index = 0
+    
     def _progress_hook(d):
-        nonlocal printed_filename
+        nonlocal printed_filename, current_file_index
+        
         if d['status'] == 'downloading':
+            # Check if this is a new file (for playlists)
+            file_index = d.get('info_dict', {}).get('playlist_index', 1)
+            if file_index != current_file_index:
+                current_file_index = file_index
+                printed_filename = False
+            
             if not printed_filename:
                 filename = os.path.basename(d['info_dict'].get('_filename', ''))
-                print(f"File {file_num}/{total_files}: {filename}")
+                if is_playlist:
+                    print(f"File {file_num}/{total_files} - Video {file_index}: {filename}")
+                else:
+                    print(f"File {file_num}/{total_files}: {filename}")
                 printed_filename = True
             
             percent_str = d.get('_percent_str', '---.-%').strip()
@@ -69,7 +89,7 @@ def _download_video(url, output_folder, low_quality, file_num, total_files):
             elapsed_time = d.get('elapsed')
             if elapsed_time:
                 minutes, seconds = divmod(int(elapsed_time), 60)
-                print(f'Download finished in {minutes}m {seconds}s.')
+                print(f'\n  Download finished in {minutes}m {seconds}s.')
     
     ydl_opts = {
         'format': format_option,
