@@ -2,7 +2,7 @@ import subprocess
 import argparse
 
 
-def def convert_mov_to_mp4(input_file, output_file):
+def convert_mov_to_mp4(input_file, output_file):
     """Converts a MOV file to MP4 using ffmpeg."""
     # Build the conversion command
     command = ["ffmpeg", "-i", input_file, output_file]

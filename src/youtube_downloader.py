@@ -1,5 +1,8 @@
 
 import os
+
+os.system("pip install -U yt_dlp")
+
 import yt_dlp
 
 class MyLogger:
