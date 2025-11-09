@@ -1,7 +1,7 @@
 
 import os
 
-os.system("pip install -U yt_dlp")
+os.system("pip3 install -U yt_dlp")
 
 import yt_dlp
 
